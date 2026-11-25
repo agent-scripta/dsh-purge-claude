@@ -1,5 +1,7 @@
 # dsh-purge-evans-claude —— 小码酱按需注入（Claude 专版）
 
+> 当前版本 **1.1.72-cc.1** · 源 Evans-repo v1.1.72 · 非官方 Claude Code / ClaudeCN 适配。
+
 > 仓库名：`dsh-purge-evans-claude`（上游 [evan545295555-hash/Evans-repo](https://github.com/evan545295555-hash/Evans-repo) 的 dsh-purge Claude 专版；`-evans-repo` 标识来源版本，便于与其它来源/版本的适配区分）。注意：仓库名与插件名不同——插件/命令名仍为 `purge`（命令前缀 `/purge:purge-*` 由此而来）。
 
 > ⚠️ **运行环境限定：本插件是 Claude Code / ClaudeCN（`host1syan/claude-cn` 镜像）专版，依赖其 bun `preload.ts` 机制与 plugin `commands/` 目录规范。别的平台（官方 Anthropic Claude Code 非此镜像、DeepSeek Harness / DSH、Cursor、普通 Node 环境等）用不了。** 需要 DSH 请用上游 [Evans-repo](https://github.com/evan545295555-hash/Evans-repo)。

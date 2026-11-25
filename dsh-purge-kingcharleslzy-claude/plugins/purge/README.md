@@ -1,4 +1,4 @@
-# purge —— 破甲按需注入技能（Claude Code 专版，1.7.20-cc.6）
+# purge —— 破甲按需注入技能（Claude Code 专版，1.7.20-cc.1）
 
 > ⚠️ 仅适用于 Claude Code / ClaudeCN（`host1syan/claude-cn` 镜像），依赖 bun preload 与 plugin commands 机制；其它平台用不了。
 > 源 dsh-purge v1.7.20（kingcharleslzy-ai/dsh-purge，适配 DSH-Go/Desktop 0.2.2）。非官方适配，MIT 许可与署名见根 README。

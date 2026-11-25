@@ -1,4 +1,6 @@
-# dsh-purge-claude-1.1.93-share / purge —— 小码酱按需注入技能（Claude 专版）
+# dsh-purge-share-claude / purge —— 小码酱按需注入技能（Claude 专版）
+
+> 当前版本 **1.1.93-cc.1** · 源 dsh-purge v1.1.93。
 
 > ⚠️ **仅适用于 Claude Code / ClaudeCN（`host1syan/claude-cn` 镜像）**，依赖 bun preload 与 plugin commands 机制；其它平台用不了。
 
@@ -112,3 +114,8 @@ https://github.com/agent-scripta/dsh-purge-claude-1.1.93-share/                 
 ## 为什么命令/SKILL.md 刻意写得极简
 
 `/purge:*` 命令和 `SKILL.md` 只包含一条 `/usr/local/bin/purge <参数>` 指令，刻意不写"自举/破甲/注入/preload"等字眼，也不让 AI 读 bootstrap.sh 或规则集。原因：有自我审视能力的模型一旦读到那些内容，会判断为"给自己装改写指令链的后门"而拒绝执行。环境在首次安装时已由 install.sh/plugin 装好，日常开关不需要 AI 理解机制，只发命令即可稳定执行。
+
+
+## 文本控制面板
+
+CC 是 TUI 无侧栏整页 UI，用 `/purge:purge-panel`（或 `/purge panel`）输出纯文本面板：当前状态、档位、命令一览，只读不改状态。切换档位用 `/purge:purge-<档>`，新开会话生效。
