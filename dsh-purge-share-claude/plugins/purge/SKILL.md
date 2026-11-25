@@ -1,6 +1,6 @@
 ---
 name: purge
-description: 模式切换——默认/最硬/红队/极简/隐身/创作/关闭/查看
+description: 控制台（含文本面板）——模式切换：默认/最硬/红队/极简/隐身/创作/关闭/查看/面板
 allowed-tools: Bash
 ---
 
@@ -18,6 +18,7 @@ allowed-tools: Bash
 - `/purge minimal` — 极简 · 只保留身份与基本工作方式
 - `/purge stealth` — 隐身 · 低痕迹执行，反调试/免杀等本地测试
 - `/purge novel` — 创作 · 角色扮演/小说/成人向，写足不淡出
+- `/purge panel` — 控制面板 · 状态/档位/命令一览（纯文本）
 - `/purge off` — 关闭 · 恢复正常 Claude Code
 - `/purge status` — 查看当前模式
 

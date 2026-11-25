@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# purge 总开关 + 卸载：purge [on|off|status|default|redteam|minimal|max|stealth|novel|uninstall]
+# purge 总开关 + 卸载：purge [on|off|status|panel|default|redteam|minimal|max|stealth|novel|uninstall]
 # 自包含版：只操作 /data/dsh-purge-patch/，不依赖插件是否已安装
 set -euo pipefail
 BASE=/data/dsh-purge-patch
@@ -41,6 +41,14 @@ case "$ARG" in
     else
       echo "[purge] 未激活（正常会话）"
     fi ;;
+
+  panel)
+    if [ -f "$BASE/panel.sh" ]; then
+      bash "$BASE/panel.sh"
+    else
+      echo "[purge] 面板脚本缺失，请重新运行 install.sh 或新开会话触发自愈。" >&2
+      exit 1
+    fi ;;
   default|redteam|minimal|max|stealth|novel)
     printf '%s' "$ARG" > "$RULES"; touch "$MARK"; sync_cri "$ARG"; sync_agent "$ARG"
     echo "[purge] 已激活小码酱，规则集=$ARG。新开会话生效。" ;;
@@ -56,5 +64,5 @@ case "$ARG" in
       exit 1
     fi ;;
   *)
-    echo "[purge] 用法: /purge on|off|status|default|redteam|minimal|max|stealth|novel|uninstall" >&2; exit 1 ;;
+    echo "[purge] 用法: /purge on|off|status|panel|default|redteam|minimal|max|stealth|novel|uninstall" >&2; exit 1 ;;
 esac

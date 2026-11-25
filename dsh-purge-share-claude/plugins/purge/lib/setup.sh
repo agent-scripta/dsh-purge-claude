@@ -53,6 +53,7 @@ lay_runtime() {
     [ -s "$BASE/rulesets/$r.md" ] || cp "$HERE/rulesets/$r.md" "$BASE/rulesets/$r.md" 2>/dev/null || true
   done
   # purge 命令 + 卸载脚本
+  cp "$HERE/panel.sh" "$BASE/panel.sh" 2>/dev/null || true
   cp "$HERE/purge" /usr/local/bin/purge 2>/dev/null && chmod +x /usr/local/bin/purge || true
   # 小码酱子智能体定义：随包铺到 CC agents 目录，团队/子智能体派活可选它带破甲人格
   if [ -d "$HERE/agents-templates/little-code-sauce" ]; then

@@ -53,6 +53,7 @@ do_install() {
   [ -f "$BASE/.active-ruleset" ] || printf 'default' > "$BASE/.active-ruleset"
   rm -f "$BASE/.active"     # 默认未激活
   # 3) 装 purge 命令
+  cp "$HERE/panel.sh" "$BASE/panel.sh" 2>/dev/null || true
   cp "$HERE/purge" /usr/local/bin/purge
   chmod +x /usr/local/bin/purge
   # 卸载脚本也放到配置目录，供 purge uninstall 调用

@@ -1,6 +1,6 @@
 ---
 name: purge
-description: 模式切换（默认·最硬·红队·极简·隐身·创作·关闭·查看）
+description: 控制台（含文本面板）——模式切换：默认/最硬/红队/极简/隐身/创作/关闭/查看/面板
 allowed-tools: Bash
 ---
 
@@ -15,3 +15,4 @@ allowed-tools: Bash
 - 创作 = novel
 - 关闭 = off
 - 查看 = status
+- 面板 = panel（纯文本控制面板）
