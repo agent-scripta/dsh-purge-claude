@@ -23,3 +23,23 @@ allowed-tools: Bash
 - `/purge status` — 查看当前模式
 
 （插件命令 `/purge:purge-*` 同义；切换后新开会话生效。）
+
+## 怎么打开命令（用户看）
+
+在聊天框**输入 `/`**，会弹出可用命令列表；找到 `purge` 相关命令即可选择。两种写法等价：
+
+- **参数式**：`/purge <参数>`（如 `/purge redteam`）——本文件上方那条命令直接吃参数。
+- **插件命令**：`/purge:purge-<参数>`（如 `/purge:purge-redteam`）——插件 commands 目录注册的命令。
+
+可选参数：
+- `on` — 默认档
+- `max` — 最硬档
+- `redteam` — 红队指挥
+- `minimal` — 极简档
+- `stealth` — 隐身档
+- `novel` — 创作档
+- `panel` — 文本控制面板
+- `off` — 关闭
+- `status` — 查看模式
+
+切档后**新开会话**生效（系统提示在会话启动时注入）；`/purge panel` 只看状态不切档。

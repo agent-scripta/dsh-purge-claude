@@ -3,6 +3,14 @@
 > 当前版本 **1.7.20-cc.1** · 源 dsh-purge **v1.7.20**（kingcharleslzy-ai/dsh-purge，适配 DSH-Go / Desktop 0.2.2）· 非官方 Claude Code / ClaudeCN 适配。
 > 插件名与命令名仍是 `purge`（命令前缀 `/purge:purge-*`）。
 
+
+## 怎么用（最快上手）
+
+1. 装好后**新开一个会话**（默认正常会话，不自动破甲）。
+2. 在聊天框**输入 `/`**，弹出命令列表，选 `purge` 相关命令；或直接打 `/purge <参数>`（如 `/purge redteam`）。
+3. 切档后**再开新会话**生效；用 `/purge panel` 看当前档位和状态（只读、不切档）。
+4. 想恢复正常 Claude Code，用 `/purge off`。
+
 ## 这是什么
 
 把 dsh-purge 的"破甲"能力移植到 Claude Code / ClaudeCN：不改宿主源码，用 CC 原生机制（bun preload 注入 + plugin commands + SessionStart hook）实现。默认正常会话，用命令按需切成破甲模式。
