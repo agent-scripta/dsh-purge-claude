@@ -1,6 +1,6 @@
 ---
 name: purge
-description: 控制台（含文本面板）——模式切换：默认/最硬/红队/极简/隐身/创作/关闭/查看/面板
+description: 小码酱控制台（源 Evans-repo v1.1.72 / 基于 dsh-purge 1.1.71）：9 个命令（on/max/redteam/minimal/stealth/novel/panel/off/status）+ 文本面板 + cyber-risk 系统提示注入 + 切档联动 agent。输入 / 选 purge 命令，新开会话生效。
 allowed-tools: Bash
 ---
 
