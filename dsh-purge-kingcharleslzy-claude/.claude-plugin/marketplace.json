@@ -1,0 +1,13 @@
+{
+  "name": "lcs-skills",
+  "owner": {
+    "name": "kingcharleslzy-ai (CC adaptation)"
+  },
+  "plugins": [
+    {
+      "name": "purge",
+      "source": "./plugins/purge",
+      "description": "破甲按需注入（源 dsh-purge v1.7.20）：多档（含原版无限制）+ 文本面板 + 88 补丁→CC + 23 红队技能（rt 命令）+ redteam 得分系统，SessionStart 自愈"
+    }
+  ]
+}

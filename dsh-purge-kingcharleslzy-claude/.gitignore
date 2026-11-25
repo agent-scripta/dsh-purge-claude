@@ -1,0 +1,23 @@
+# 打包产物 / 备份 —— 不入库
+*.tgz
+*.tar.gz
+*.zip
+*.bak
+backup-*/
+install-*.log
+setup.log
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# 运行时状态（容器里的注入目录，本仓库不含）
+.active
+.active-ruleset
+data/
+node_modules/
+
+# redteam 运行时数据（得分/资产/攻击链库，按靶标生成，不入库）
+.redteam-data/

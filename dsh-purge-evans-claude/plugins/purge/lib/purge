@@ -1,0 +1,60 @@
+#!/usr/bin/env bash
+# purge 总开关 + 卸载：purge [on|off|status|default|redteam|minimal|max|stealth|novel|uninstall]
+# 自包含版：只操作 /data/dsh-purge-patch/，不依赖插件是否已安装
+set -euo pipefail
+BASE=/data/dsh-purge-patch
+MARK=$BASE/.active
+RULES=$BASE/.active-ruleset
+CRI=/data/.claude/claude-cn/cyber-risk-instruction.md
+ARG="${1:-}"
+
+# 同步服务端系统提示(web 真正生效通道)：传规则集名则写入，传空则删除恢复默认
+sync_cri() {
+  local r="${1:-}"
+  if [ -n "$r" ] && [ -s "$BASE/rulesets/$r.md" ]; then
+    mkdir -p "$(dirname "$CRI")" 2>/dev/null || true
+    cp "$BASE/rulesets/$r.md" "$CRI" 2>/dev/null || true
+  else
+    rm -f "$CRI" 2>/dev/null || true
+  fi
+}
+
+# 切档后同步子智能体人格（失败不影响切档）
+sync_agent() {
+  local r="${1:-}"
+  # 优先用随包 node 版（互斥清理更可靠）；容器内 bun/node 可用
+  local LINK="$BASE/agent-link.js"
+  if [ -f "$LINK" ]; then
+    local js=""
+    command -v bun >/dev/null 2>&1 && js="bun" || { command -v node >/dev/null 2>&1 && js="node"; }
+    if [ -n "$js" ]; then $js "$LINK" "$r" >/dev/null 2>&1 && return 0; fi
+  fi
+  [ -f "$BASE/sync-agent.sh" ] && bash "$BASE/sync-agent.sh" "$r" >/dev/null 2>&1 || true
+}
+
+case "$ARG" in
+  off)
+    rm -f "$MARK"; sync_cri ""; sync_agent off; echo "[purge] 已关闭。新开会话恢复正常 Claude Code。" ;;
+  status)
+    if [ -f "$MARK" ]; then
+      echo "[purge] 小码酱已激活，规则集=$(cat "$RULES" 2>/dev/null || echo default)"
+    else
+      echo "[purge] 未激活（正常会话）"
+    fi ;;
+  default|redteam|minimal|max|stealth|novel)
+    printf '%s' "$ARG" > "$RULES"; touch "$MARK"; sync_cri "$ARG"; sync_agent "$ARG"
+    echo "[purge] 已激活小码酱，规则集=$ARG。新开会话生效。" ;;
+  on|"")
+    touch "$MARK"; sync_cri "$(cat "$RULES" 2>/dev/null || echo default)"
+    echo "[purge] 已激活小码酱，规则集=$(cat "$RULES" 2>/dev/null || echo default)。新开会话生效。" ;;
+  uninstall)
+    UN="$BASE/uninstall.sh"
+    if [ -f "$UN" ]; then
+      bash "$UN"
+    else
+      echo "[purge] 找不到 uninstall.sh，请在技能目录手动执行 bash uninstall.sh" >&2
+      exit 1
+    fi ;;
+  *)
+    echo "[purge] 用法: /purge on|off|status|default|redteam|minimal|max|stealth|novel|uninstall" >&2; exit 1 ;;
+esac

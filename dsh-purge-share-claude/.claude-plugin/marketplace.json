@@ -1,0 +1,13 @@
+{
+  "name": "lcs-skills",
+  "owner": {
+    "name": "Little Code Sauce"
+  },
+  "plugins": [
+    {
+      "name": "purge",
+      "source": "./plugins/purge",
+      "description": "小码酱按需注入（Claude 专版），5 个 /purge:purge-* 命令按需切换，SessionStart 自动初始化"
+    }
+  ]
+}

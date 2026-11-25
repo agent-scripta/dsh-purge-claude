@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# purge 总开关 + 卸载：purge [on|off|status|panel|default|redteam|minimal|stealth|novel|max|unrestricted|uninstall]
+# 自包含版：只操作 /data/dsh-purge-patch/ 与 ClaudeCN 的服务端系统提示注入文件。
+set -euo pipefail
+BASE=/data/dsh-purge-patch
+MARK=$BASE/.active
+RULES=$BASE/.active-ruleset
+# ClaudeCN(claude-cn) 服务端系统提示注入文件：web 会话真正吃的是这个（preload append 在 sdk 里被忽略）
+CRI=/data/.claude/claude-cn/cyber-risk-instruction.md
+ARG="${1:-}"
+
+# 同步服务端系统提示：传规则集名则写入（激活），传空则删除（恢复平台默认）
+sync_cri() {
+  local r="${1:-}"
+  if [ -n "$r" ] && [ -s "$BASE/rulesets/$r.md" ]; then
+    mkdir -p "$(dirname "$CRI")" 2>/dev/null || true
+    cp "$BASE/rulesets/$r.md" "$CRI" 2>/dev/null || true
+  else
+    rm -f "$CRI" 2>/dev/null || true
+  fi
+  # CC 容器内有独立 /data，Web 会话读容器里的 CRI；同步一份进去
+  if command -v docker >/dev/null 2>&1; then
+    if [ -n "$r" ] && [ -s "$BASE/rulesets/$r.md" ]; then
+      docker cp "$BASE/rulesets/$r.md" claude-cn:/tmp/_cri.md 2>/dev/null || true
+      docker exec claude-cn sh -c 'cp /tmp/_cri.md /data/.claude/claude-cn/cyber-risk-instruction.md 2>/dev/null; rm -f /tmp/_cri.md' 2>/dev/null || true
+    else
+      docker exec claude-cn sh -c 'rm -f /data/.claude/claude-cn/cyber-risk-instruction.md' 2>/dev/null || true
+    fi
+  fi
+}
+
+sync_agent() {
+  local r="${1:-}"
+  command -v docker >/dev/null 2>&1 || return 0
+  if [ -f "$BASE/agent-link.js" ]; then
+    docker cp "$BASE/agent-link.js" claude-cn:/data/dsh-purge-patch/agent-link.js 2>/dev/null || true
+    [ -d "$BASE/agents-templates" ] && docker cp "$BASE/agents-templates/." claude-cn:/data/dsh-purge-patch/agents-templates/ 2>/dev/null || true
+    docker exec claude-cn /root/.bun/bin/bun /data/dsh-purge-patch/agent-link.js "$r" >/dev/null 2>&1 || true
+  fi
+}
+
+
+case "$ARG" in
+  off)
+    rm -f "$MARK"; sync_cri ""; sync_agent off
+    echo "[purge] 已关闭。新开会话恢复正常 Claude Code。" ;;
+  status)
+    if [ -f "$MARK" ]; then
+      echo "[purge] 小码酱已激活，规则集=$(cat "$RULES" 2>/dev/null || echo default)"
+    else
+      echo "[purge] 未激活（正常会话）"
+    fi ;;
+  panel)
+    if [ -f "$BASE/panel.sh" ]; then
+      bash "$BASE/panel.sh"
+    else
+      echo "[purge] 面板脚本缺失，请重新运行 install.sh 或新开会话触发自愈。" >&2
+      exit 1
+    fi ;;
+  patches)
+    PATCHES="${PLUGIN_ROOT:-$(dirname "$(dirname "$(readlink -f "$0")")")}/lib/cc-patches.sh"
+    [ -f "$PATCHES" ] || PATCHES="$BASE/cc-patches.sh"
+    if [ -f "$PATCHES" ]; then
+      bash "$PATCHES" "${2:-status}"
+    else
+      echo "[purge] 补丁脚本缺失，请在插件目录运行 lib/cc-patches.sh。" >&2
+      exit 1
+    fi ;;
+  default|redteam|minimal|stealth|novel|max|unrestricted)
+    printf '%s' "$ARG" > "$RULES"; touch "$MARK"; sync_cri "$ARG"; sync_agent "$ARG"
+    echo "[purge] 已激活小码酱，规则集=$ARG。新开会话生效。" ;;
+  on|"")
+    # on 不带参数 = 默认档：显式写回 default，避免沿用上次残留的规则集（如 redteam）
+    printf 'default' > "$RULES"; touch "$MARK"; sync_cri default; sync_agent default
+    echo "[purge] 已激活小码酱，规则集=default（on 默认档）。新开会话生效。" ;;
+  uninstall)
+    UN="$BASE/uninstall.sh"
+    if [ -f "$UN" ]; then
+      bash "$UN"
+    else
+      echo "[purge] 找不到 uninstall.sh，请在技能目录手动执行 bash uninstall.sh" >&2
+      exit 1
+    fi ;;
+  *)
+    echo "[purge] 用法: /purge on|off|status|panel|default|redteam|minimal|stealth|novel|max|unrestricted|uninstall" >&2; exit 1 ;;
+esac

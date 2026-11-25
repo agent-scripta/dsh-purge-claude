@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# rt —— CC 原生 redteam 命令（技能正文里写 `rt <tool> '<json>'`）
+# 从插件根 lib/ 运行 rt.mjs；装到 /usr/local/bin/rt 后自动定位真实 lib。
+SELF="$(readlink -f "$0" 2>/dev/null || echo "$0")"
+LIB="$(dirname "$SELF")"
+# 若被装到 /usr/local/bin，则回退到已知的插件 lib 路径
+if [ ! -f "$LIB/rt.mjs" ]; then
+  for cand in "${CLAUDE_PLUGIN_ROOT:-}/lib" /data/dsh-purge-patch /data/purge-src/plugins/purge/lib /opt/purge-github/plugins/purge/lib; do
+    [ -f "$cand/rt.mjs" ] && LIB="$cand" && break
+  done
+fi
+exec node "$LIB/rt.mjs" "$@"

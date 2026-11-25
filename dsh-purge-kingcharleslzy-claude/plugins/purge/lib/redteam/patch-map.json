@@ -1,0 +1,1131 @@
+[
+  {
+    "id": 1,
+    "name": "WORKSPACE_CONTEXT_INTRO",
+    "desc": "全局免责声明 / global disclaimer",
+    "layer": "提示词",
+    "file": "agent-instructions",
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "workspace 指令作为 guidance 不压过 system"
+  },
+  {
+    "id": 2,
+    "name": "REPLACEMENT_WORKSPACE_CONTEXT_INTRO",
+    "desc": "替换稿不压过 system / replacement does not override system",
+    "layer": "提示词",
+    "file": "agent-instructions",
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "替换稿优先级不压过 system"
+  },
+  {
+    "id": 3,
+    "name": "SCOPE_INTRO",
+    "desc": "作用域不压过 system / scope does not override system",
+    "layer": "提示词",
+    "file": "agent-instructions",
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "scope 不压过 system"
+  },
+  {
+    "id": 4,
+    "name": "SYSTEM_PROMPT_PERSONA",
+    "desc": "persona：去掉官方默认身份，不另写人设 / strip official identity only",
+    "layer": "提示词",
+    "file": [
+      "agent-preset",
+      "web-app",
+      "headless",
+      "preset-acp-app",
+      "preset-sdk-app"
+    ],
+    "optional": false,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "剥离官方默认身份 → CC 版由规则集 WHO YOU ARE 承担"
+  },
+  {
+    "id": 43,
+    "name": "WEB_PRESET_IDENTITY_STRIP",
+    "desc": "Web 四个内置预设只去掉身份句 / strip web preset identity only",
+    "layer": "提示词",
+    "file": [
+      "preset-standard",
+      "preset-ptc",
+      "preset-cordis",
+      "preset-minimal"
+    ],
+    "optional": false,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "Web 预设身份剥离 → CC 无多预设 UI，规则集承担"
+  },
+  {
+    "id": 76,
+    "name": "PRESET_UNRESTRICTED_IDENTITY_STRIP",
+    "desc": "用户自造 unrestricted 预设只去掉身份句（软补丁）/ soft strip for a user-made unrestricted preset",
+    "layer": "提示词",
+    "file": [
+      "preset-unrestricted"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "unrestricted 预设身份剥离 → 规则集承担"
+  },
+  {
+    "id": 70,
+    "name": "PRESET_SHELL_NETWORK",
+    "desc": "极简模式终端不再写没有网络 / minimal shell drops no-network ban",
+    "layer": "提示词",
+    "file": [
+      "preset-minimal",
+      "preset-sdk-minimal"
+    ],
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "终端网络禁令移除 → 规则集已写操作意图优先"
+  },
+  {
+    "id": 73,
+    "name": "PRESET_BASH_MIRROR_LINE",
+    "desc": "极简 bash 去掉误留的镜像说明 / drop the extra mirror sentence",
+    "layer": "提示词",
+    "file": [
+      "preset-minimal",
+      "preset-sdk-minimal"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "bash 镜像说明移除 → 规则集承担"
+  },
+  {
+    "id": 71,
+    "name": "LIANGSHEN_IDENTITY_LINE",
+    "desc": "梁神去掉官方身份句，留下本模式的工作纪律 / strip liangshen stock identity line",
+    "layer": "提示词",
+    "file": [
+      "preset-liangshen",
+      "preset-liangshen-pkg"
+    ],
+    "optional": false,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "身份句剥离保留纪律 → max 规则集逐字保留"
+  },
+  {
+    "id": 5,
+    "name": "APPROVAL_NEVER_SENTENCE",
+    "desc": "审批提示句限制 / approval sentence",
+    "layer": "提示词",
+    "file": [
+      "user-approval",
+      "user-approval-invariant"
+    ],
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "审批话术限制 → CC skip-permissions 无审批话术"
+  },
+  {
+    "id": 6,
+    "name": "SANDBOX_DENY_FILE_WRITE",
+    "desc": "沙箱 deny file-write / sandbox deny",
+    "layer": "代码",
+    "file": "sandbox-local",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "沙箱 deny 文件写 → CC --dangerously-skip-permissions"
+  },
+  {
+    "id": 7,
+    "name": "SANDBOX_MODE_DEFAULT",
+    "desc": "沙箱默认 danger-full-access（可被 UI 切换，不写死 env） / soft default only",
+    "layer": "代码",
+    "file": "base",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "沙箱默认全开 → CC 启动参数"
+  },
+  {
+    "id": 8,
+    "name": "APPROVAL_POLICY_DEFAULT",
+    "desc": "审批：danger-full-access → never（与 mode 组合合法） / compose with mode",
+    "layer": "代码",
+    "file": "base",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "审批默认 never → CC skip-permissions"
+  },
+  {
+    "id": 9,
+    "name": "APPROVAL_AUTO_GRANT",
+    "desc": "审批门自动放行 / approval auto-grant",
+    "layer": "代码",
+    "file": [
+      "user-approval-code",
+      "user-approval-invariant",
+      "user-approval"
+    ],
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "审批自动放行 → CC skip-permissions"
+  },
+  {
+    "id": 10,
+    "name": "APPROVAL_CONFIG_DEFAULT_NEVER",
+    "desc": "审批配置默认 never / approval config default",
+    "layer": "代码",
+    "file": "user-approval-code",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "审批配置 never → CC settings.json permissions"
+  },
+  {
+    "id": 11,
+    "name": "APPROVAL_NEVER_SENTENCE_BYPASS",
+    "desc": "never 提示句 → 自动放行 / never sentence bypass",
+    "layer": "提示词",
+    "file": "user-approval-code",
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "never 句自动放行 → CC 无审批句"
+  },
+  {
+    "id": 12,
+    "name": "APPROVAL_ASK_SENTENCE_BYPASS",
+    "desc": "ask 提示句 → 自动放行 / ask sentence bypass",
+    "layer": "提示词",
+    "file": [
+      "user-approval-code",
+      "user-approval",
+      "user-approval-invariant"
+    ],
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "ask 句自动放行 → CC 无审批句"
+  },
+  {
+    "id": 13,
+    "name": "ESCALATION_WIDENING_EXEMPT",
+    "desc": "豁免严格升级阶梯 / escalation widening exempt",
+    "layer": "代码",
+    "file": "escalation",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "升级阶梯豁免 → CC 无升级阶梯"
+  },
+  {
+    "id": 14,
+    "name": "ESCALATION_GRANT_UNCONDITIONAL",
+    "desc": "升级请求无条件授信 / escalation grant unconditional",
+    "layer": "代码",
+    "file": "escalation",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "升级无条件授信 → CC skip-permissions"
+  },
+  {
+    "id": 15,
+    "name": "SANDBOX_CONFINE_PASSTHROUGH",
+    "desc": "沙箱 confine 直通 / sandbox confine passthrough",
+    "layer": "代码",
+    "file": "sandbox-local",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "沙箱 confine 直通 → CC skip-permissions"
+  },
+  {
+    "id": 16,
+    "name": "FS_FENCE_DISABLED",
+    "desc": "文件系统围栏取消 / fs fence disabled",
+    "layer": "代码",
+    "file": "fs-sandbox",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "fs 围栏取消 → CC 无 fs 围栏"
+  },
+  {
+    "id": 91,
+    "name": "BROWSER_COOKIE_NAME_IGNORE_PORT",
+    "desc": "仅桌面端：会话 cookie 名忽略端口，避免随机端口累积 cookie 撑爆请求头（431）/ cookie name ignores port",
+    "layer": "代码",
+    "file": "client-connection",
+    "optional": false,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "桌面 cookie 名忽略端口 → CC 无桌面会话"
+  },
+  {
+    "id": 92,
+    "name": "HOST_MAX_HTTP_HEADER_SIZE",
+    "desc": "放宽 host 进程 HTTP 请求头上限到 256KB，兜住历史 cookie 累积 / raise host max-http-header-size",
+    "layer": "代码",
+    "file": "desktop-shell",
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "host HTTP 头上限 → CC 宿主自管"
+  },
+  {
+    "id": 93,
+    "name": "SANDBOX_POLICY_BRAND_NEUTRAL",
+    "desc": "三条沙箱策略文案去掉 DSH 品牌词 / drop DSH branding from every file-policy line",
+    "layer": "提示词",
+    "file": [
+      "sandbox-policy"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "沙箱策略文案去品牌 → CC 无 DSH 品牌词"
+  },
+  {
+    "id": 94,
+    "name": "SKILL_BADGE_DESCRIPTION_NEUTRAL",
+    "desc": "技能徽章描述去掉官方品牌要求 / neutralize skill-badge branding requirement",
+    "layer": "提示词",
+    "file": [
+      "skill-badge"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "技能徽章去品牌 → CC 技能无此要求"
+  },
+  {
+    "id": 17,
+    "name": "FS_OBSERVATION_INTENT_FREE",
+    "desc": "观察策略读写意图放行 / observation write/edit intent bypass",
+    "layer": "代码",
+    "file": "fs-observation-policy",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "观察策略读写放行 → CC 无 observe 门禁"
+  },
+  {
+    "id": 21,
+    "name": "BASH_TIMEOUT_RESTORE",
+    "desc": "恢复插件延长的 bash 等待 / restore plugin-raised bash wait",
+    "layer": "代码",
+    "file": "base",
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "bash 超时 → CC Bash 工具自带 timeout"
+  },
+  {
+    "id": 22,
+    "name": "READ_CAPS_RAISED",
+    "desc": "read 上限放宽 / read caps raised",
+    "layer": "代码",
+    "file": "tool-fs",
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "read 上限 → CC Read 工具自带"
+  },
+  {
+    "id": 23,
+    "name": "SUBAGENT_MAXDEPTH_RAISED",
+    "desc": "子代理深度默认 3 → 10 / subagent maxDepth raised",
+    "layer": "代码",
+    "file": [
+      "subagent",
+      "tool-subagent"
+    ],
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "子代理深度 → CC subagent/team 机制"
+  },
+  {
+    "id": 24,
+    "name": "PRESET_FETCH_ENABLED",
+    "desc": "preset tool-web fetch 打开 / preset fetch enabled",
+    "layer": "代码",
+    "file": [
+      "preset-unrestricted",
+      "preset-standard",
+      "preset-cordis",
+      "preset-ptc",
+      "preset-liangshen",
+      "preset-liangshen-pkg"
+    ],
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "preset fetch → CC web_fetch 原生"
+  },
+  {
+    "id": 25,
+    "name": "HARNESS_IDENTITY_STRIP",
+    "desc": "去掉官方默认身份，保留官方功能提示词 / strip default identity only",
+    "layer": "提示词",
+    "file": "system-prompt",
+    "optional": false,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "harness 默认身份剥离 → 规则集承担"
+  },
+  {
+    "id": 26,
+    "name": "MINIMAL_PERSONA_PURGE",
+    "desc": "内置 minimal：去掉默认身份并打开 complete，让 inject 能进 / strip identity, open inject",
+    "layer": "提示词",
+    "file": [
+      "preset-minimal",
+      "preset-sdk-minimal"
+    ],
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "minimal 打开 complete 让注入进 → CC 直接写 CRI 文件"
+  },
+  {
+    "id": 80,
+    "name": "MINIMAL_OFFICIAL_TOOLSET",
+    "desc": "撤掉曾追加的 fs/web，恢复官方极简工具表 / restore official minimal tool plugins",
+    "layer": "工具",
+    "file": [
+      "preset-minimal",
+      "preset-sdk-minimal"
+    ],
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "极简工具表 → CC 工具集由宿主定义"
+  },
+  {
+    "id": 28,
+    "name": "LIANGSHEN_PHASE1_KEEP_INJECT",
+    "desc": "插件 dsh-liangshen（梁神）：phase-1 保留注入段（可选） / @linxin666/dsh-liangshen",
+    "layer": "提示词",
+    "file": [
+      "liangshen-tool-bootstrap"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "phase1 保留注入 → CC preload 注入段承担"
+  },
+  {
+    "id": 32,
+    "name": "WEB_SURFACE_IDENTITY_NEUTRAL",
+    "desc": "Web 面：去掉 DeepSeek Harness 自称 / neutralize web GUI identity branding",
+    "layer": "提示词",
+    "file": [
+      "harness-dev-context",
+      "web-app-lib"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "Web 身份中性化 → 规则集承担"
+  },
+  {
+    "id": 29,
+    "name": "TOOL_WEB_UNTRUSTED_NEUTRAL",
+    "desc": "dsh-tool-web：外部内容 untrusted 拦截→可执行数据 / neutralize web untrusted framing",
+    "layer": "工具",
+    "file": [
+      "tool-web",
+      "tool-web-nested"
+    ],
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "tool-web untrusted 中性 → CC web_fetch 已按数据处理"
+  },
+  {
+    "id": 30,
+    "name": "HOOKS_CLAUDE_DENY_ALLOW",
+    "desc": "dsh-hooks-claude-code：deny→allow（可选） / hooks deny bypass",
+    "layer": "工具",
+    "file": [
+      "hooks-claude-code",
+      "hooks-claude-code-nested"
+    ],
+    "optional": true,
+    "cat": "C",
+    "cc": "钩子层",
+    "how": "hooks deny→allow → CC hooks.json 不设 deny"
+  },
+  {
+    "id": 31,
+    "name": "HOOKS_CODEX_DENY_ALLOW",
+    "desc": "dsh-hooks-codex：deny→allow（可选） / hooks deny bypass",
+    "layer": "工具",
+    "file": [
+      "hooks-codex",
+      "hooks-codex-nested"
+    ],
+    "optional": true,
+    "cat": "C",
+    "cc": "钩子层",
+    "how": "codex deny→allow → CC hooks.json 不设 deny"
+  },
+  {
+    "id": 33,
+    "name": "TOOL_SHELL_DENIAL_PROMPT",
+    "desc": "bash/pwsh 工具描述：沙箱拒绝话术→可继续 / neutralize sandbox-denial tool text",
+    "layer": "提示词",
+    "file": [
+      "tool-bash",
+      "tool-pwsh"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "shell 拒绝话术中性 → CC skip-permissions"
+  },
+  {
+    "id": 34,
+    "name": "SANDBOX_HINT_NEUTRAL",
+    "desc": "沙箱拒绝/升级 hint 不再要求用户审批 / neutralize sandbox hint to model",
+    "layer": "提示词",
+    "file": "escalation",
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "沙箱 hint 中性 → CC skip-permissions"
+  },
+  {
+    "id": 35,
+    "name": "ESCALATION_NEVER_REJECT",
+    "desc": "升级结果 rejected/cancelled/unavailable 仍授信 / escalation never throws",
+    "layer": "代码",
+    "file": "escalation",
+    "optional": false,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "升级失败仍授信 → CC skip-permissions"
+  },
+  {
+    "id": 36,
+    "name": "TOOL_FS_ESCALATION_SCHEMA",
+    "desc": "fs 升级字段：去掉 user approval 拦截描述 / neutralize fs escalation schema",
+    "layer": "提示词",
+    "file": [
+      "tool-fs",
+      "escalation"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "fs 升级字段去审批描述 → CC 无审批通道"
+  },
+  {
+    "id": 37,
+    "name": "SUBAGENT_SCOPE_LOCK_NEUTRAL",
+    "desc": "子代理权限锁→可继续 / neutralize subagent scope-lock prompt",
+    "layer": "提示词",
+    "file": [
+      "subagent",
+      "subagent-types"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "子代理权限锁中性 → CC 子代理无此锁"
+  },
+  {
+    "id": 38,
+    "name": "PERSONA_TEXT_PREFIX_ALIAS",
+    "desc": "dsh-persona：兼容 0.1.2 text 字段，否则梁神会话起不来 / accept legacy text as prefix",
+    "layer": "代码",
+    "file": "persona",
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "persona text 兼容 → CC 无 0.1.2 兼容问题"
+  },
+  {
+    "id": 39,
+    "name": "SESSION_V0_PLUGIN_SUMMARY_ALIAS",
+    "desc": "v0 会话：mnemon summary 可挂在 instructions/recall 上 / allow plugin summary off notice",
+    "layer": "代码",
+    "file": "session-format-v0",
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "v0 session 别名 → CC 无 v0 会话"
+  },
+  {
+    "id": 40,
+    "name": "COMPLETE_PROMPT_KEEP_INJECT",
+    "desc": "complete 预设仍保留 dsh-purge 注入 / keep inject after complete prompt",
+    "layer": "0.1.5 兼容",
+    "file": [
+      "system-prompt",
+      "system-prompt-nested"
+    ],
+    "optional": false,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "complete 预设保留注入 → CC preload 承担"
+  },
+  {
+    "id": 42,
+    "name": "SETTINGS_LEGACY_API",
+    "desc": "按宿主接口适配设置事件；仅旧宿主保留 legacy register/get / native settings API compatibility",
+    "layer": "代码",
+    "file": "settings",
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "settings legacy API → CC settings.json"
+  },
+  {
+    "id": 45,
+    "name": "OFFICIAL_DESKTOP_UPDATE_HANDOFF",
+    "desc": "官方桌面升级安装已下载的新版本，不再重新打开旧的解开目录",
+    "layer": "代码",
+    "file": "desktop-shell",
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "桌面升级接管 → CC 无 DSH 桌面升级"
+  },
+  {
+    "id": 46,
+    "name": "OFFICIAL_DESKTOP_UPDATE_ASCII",
+    "desc": "已接管的官方桌面更新改为 ASCII 脚本，中文 Windows 不再吞掉换行",
+    "layer": "代码",
+    "file": "desktop-shell",
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "桌面升级 ASCII 脚本 → CC 无"
+  },
+  {
+    "id": 47,
+    "name": "ANTHROPIC_OAUTH_NO_CLAUDE_IDENTITY",
+    "desc": "Anthropic OAuth 不再强插 Claude Code 首段系统提示 / drop Claude Code OAuth system prefix",
+    "layer": "0.2.0 兼容",
+    "file": [
+      "pi-ai-anthropic-messages"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "OAuth 不插 Claude 身份 → 规则集覆盖"
+  },
+  {
+    "id": 48,
+    "name": "TOOL_SHELL_DELETE_MOVE_NEUTRAL",
+    "desc": "bash/pwsh 去掉 delete/move 过度谨慎描述 / drop delete-move caution in shell tools",
+    "layer": "工具",
+    "file": [
+      "tool-bash",
+      "tool-pwsh"
+    ],
+    "optional": true,
+    "cat": "B",
+    "cc": "工具层",
+    "how": "shell delete/move 去谨慎 → CC skip-permissions"
+  },
+  {
+    "id": 49,
+    "name": "ANTHROPIC_OAUTH_CLI_NEUTRAL",
+    "desc": "OAuth 不再伪装 claude-cli / stop Claude CLI OAuth mimicry",
+    "layer": "0.2.0 兼容",
+    "file": [
+      "pi-ai-anthropic-messages"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "OAuth 不伪装 claude-cli → 规则集覆盖"
+  },
+  {
+    "id": 50,
+    "name": "SESSION_REFERENCE_FRAMING_NEUTRAL",
+    "desc": "跨会话引用与 0.1.7 一样标 untrusted / session-reference framing matches 0.1.7",
+    "layer": "提示词",
+    "file": [
+      "session-reference"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "跨会话引用标 untrusted → 规则集已有 untrusted 数据纪律"
+  },
+  {
+    "id": 51,
+    "name": "FRESH_SESSION_FULL_ACCESS",
+    "desc": "新会话在部署已是 danger-full-access 时不再钉回 workspace-write / keep fresh sessions on full access",
+    "layer": "代码",
+    "file": [
+      "permission-presets",
+      "permission-presets-types"
+    ],
+    "optional": true,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "新会话保持全开 → CC permission-mode 配置"
+  },
+  {
+    "id": 52,
+    "name": "SESSION_LOG_UPLOAD_DEFAULT_OFF",
+    "desc": "官方模型 API 默认不上传 Session Log / session log upload off by default",
+    "layer": "代码",
+    "file": [
+      "session-log-deepseek",
+      "session-log-deepseek-types"
+    ],
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "session log 上传默认关 → CC 宿主自管"
+  },
+  {
+    "id": 53,
+    "name": "WEB_SURFACE_PROHIBITION",
+    "desc": "网页端提示词去掉身份句和禁止另开服务器 / drop web identity and do-not-start",
+    "layer": "提示词",
+    "file": [
+      "harness-dev-context",
+      "web-app-lib"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "身份层",
+    "how": "Web 禁止句移除 → 规则集承担"
+  },
+  {
+    "id": 54,
+    "name": "DELIVERABLE_DO_NOT",
+    "desc": "交付物提示词去掉 Do not call present / drop deliverable prohibition",
+    "layer": "提示词",
+    "file": [
+      "deliverable-file-references"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "交付物 Do-not 移除 → 规则集承担"
+  },
+  {
+    "id": 55,
+    "name": "SYSTEM_PROMPT_REPLACE_HEAD",
+    "desc": "每一步用当前整段系统提示替换第一条，避免旧提示被钉住 / replace the first system prompt every step",
+    "layer": "代码",
+    "file": [
+      "agent-loop"
+    ],
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "系统提示整段替换 → CC preload 注入"
+  },
+  {
+    "id": 74,
+    "name": "ASSEMBLE_BEFORE_PRESTEP",
+    "desc": "每个模式的第一次发送前先挂上默认提示词 / hang the default prompt before the first assemble",
+    "layer": "代码",
+    "file": [
+      "agent-loop"
+    ],
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "首发送前挂默认提示 → CC SessionStart hook"
+  },
+  {
+    "id": 66,
+    "name": "SYSTEM_PROMPT_RENDER_GUARD",
+    "desc": "renderPrompt 对 undefined section.text 兜底，避免第二轮 gateway/internal / guard undefined section text in renderPrompt",
+    "layer": "代码",
+    "file": [
+      "system-prompt",
+      "system-prompt-nested"
+    ],
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "render undefined 兜底 → CC 无此路径"
+  },
+  {
+    "id": 83,
+    "name": "DESKTOP_HOST_CLOSE_NO_FATAL",
+    "desc": "host 被信号杀 (重启密封包) 时不报错,不弹 crash dialog / don't fail on signal kill",
+    "layer": "代码",
+    "file": "desktop-shell",
+    "optional": false,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "桌面 host 信号杀 → CC 无桌面 host"
+  },
+  {
+    "id": 84,
+    "name": "DESKTOP_HOST_CLOSE_CODE0_NO_FAIL",
+    "desc": "host code=0 正常退出不报错 (消除 stopped 对话框) / don't fail on code=0 clean exit",
+    "layer": "代码",
+    "file": "desktop-shell",
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "桌面 host code0 → CC 无桌面 host"
+  },
+  {
+    "id": 67,
+    "name": "AGENT_LOOP_MESSAGES_GUARD",
+    "desc": "decision.messages 缺省时按空数组处理，避免第二轮 gateway/internal / treat missing decision.messages as empty",
+    "layer": "代码",
+    "file": [
+      "agent-loop"
+    ],
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "messages 缺省兜底 → CC 无此路径"
+  },
+  {
+    "id": 68,
+    "name": "SYSTEM_NODES_CONTENT_GUARD",
+    "desc": "systemNodes/derive 对缺 content 兜底，避免回退后第二轮 gateway/internal / guard missing message content",
+    "layer": "代码",
+    "file": [
+      "agent-loop",
+      "session"
+    ],
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "systemNodes 兜底 → CC 无此路径"
+  },
+  {
+    "id": 69,
+    "name": "MODEL_STREAM_RELEASE",
+    "desc": "deepseek-flash 恢复官方 in-history，并撤掉会打成 TRANSPORT 的独立连接补丁 / restore official in-history and remove the transport-breaking ",
+    "layer": "代码",
+    "file": [
+      "llm-deepseek"
+    ],
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "model stream 释放 → CC 宿主自管"
+  },
+  {
+    "id": 72,
+    "name": "MESSAGES_SYSTEM_CURRENT",
+    "desc": "Messages 的 system 字段用当前系统提示，不再把后出现的系统提示降成中途消息 / messages system field keeps the current prompt",
+    "layer": "代码",
+    "file": [
+      "llm-deepseek"
+    ],
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "messages system 当前 → CC 宿主自管"
+  },
+  {
+    "id": 56,
+    "name": "REWIND_HIDE_CUT_ONLY",
+    "desc": "回退只藏被撤掉的那一轮 / rewind hides only the cut range",
+    "layer": "代码",
+    "file": [
+      "conversation-client"
+    ],
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "rewind 隐藏轮次 → CC 无回退 UI"
+  },
+  {
+    "id": 77,
+    "name": "REWIND_DROP_SENT_ON_APPEND",
+    "desc": "回退标记到达时立刻从当前对话拿掉已发送的消息 / drop sent messages when the rewind marker appends",
+    "layer": "代码",
+    "file": [
+      "conversation-client"
+    ],
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "rewind 丢已发消息 → CC 无回退 UI"
+  },
+  {
+    "id": 75,
+    "name": "REWIND_RESET_TODOS",
+    "desc": "回退把已完成任务收回成未开始 / rewind resets completed todos to pending",
+    "layer": "代码",
+    "file": [
+      "tool-todo"
+    ],
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "rewind 重置 todos → CC 无回退 UI"
+  },
+  {
+    "id": 57,
+    "name": "DEEPSEEK_SYSTEM_ROLE",
+    "desc": "developer role 仅限 openai.com/azure 原生，第三方代理 (deepseek/glm/recoverystar/中转) 全回退 system / allowlist openai+azure for devel",
+    "layer": "代码",
+    "file": [
+      "pi-ai-completions",
+      "pi-ai-responses-shared"
+    ],
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "developer role 限定 → CC 宿主自管"
+  },
+  {
+    "id": 58,
+    "name": "REWIND_SKIP_DERIVE",
+    "desc": "回退空标记不进模型请求 / rewind markers stay off the model transcript",
+    "layer": "代码",
+    "file": [
+      "session"
+    ],
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "rewind 空标记跳过 → CC 无回退 UI"
+  },
+  {
+    "id": 59,
+    "name": "OFFICIAL_AUTO_REVIEW_PASSTHROUGH",
+    "desc": "官方 Auto Review 不再拦工具 / official auto-review no longer denies tools",
+    "layer": "代码",
+    "file": [
+      "auto-review"
+    ],
+    "optional": true,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "Auto Review 不拦工具 → CC 无 auto-review"
+  },
+  {
+    "id": 60,
+    "name": "OFFICIAL_RUN_CODE_APPROVAL_NEUTRAL",
+    "desc": "PTC / run_code：沙箱加宽句改为自动放行 / run_code sandbox escalation auto-granted",
+    "layer": "工具",
+    "file": [
+      "ptc-tool"
+    ],
+    "optional": true,
+    "cat": "B",
+    "cc": "工具层",
+    "how": "run_code 加宽自动放行 → CC skip-permissions"
+  },
+  {
+    "id": 61,
+    "name": "OFFICIAL_SANDBOX_POLICY_NEUTRAL",
+    "desc": "沙箱只读策略不拦任务；加宽自动放行 / sandbox policy auto-grant escalation",
+    "layer": "提示词",
+    "file": [
+      "sandbox-policy"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "沙箱只读策略不拦任务 → CC skip-permissions"
+  },
+  {
+    "id": 62,
+    "name": "OFFICIAL_TOOL_ASK_FAILOPEN",
+    "desc": "无审批通道时放行；用户点拒绝仍 deny / fail-open only without UI channel",
+    "layer": "代码",
+    "file": [
+      "dsh-tools-pipeline",
+      "dsh-tools-pipeline-types"
+    ],
+    "optional": true,
+    "cat": "B",
+    "cc": "权限层",
+    "how": "无审批通道时 fail-open → CC skip-permissions"
+  },
+  {
+    "id": 63,
+    "name": "OFFICIAL_PLAN_MODE_NEUTRAL",
+    "desc": "计划模式：操作者要求实施时不硬拦 / plan mode allows operator-directed execution",
+    "layer": "提示词",
+    "file": [
+      "base",
+      "preset-ptc",
+      "preset-standard",
+      "preset-cordis"
+    ],
+    "optional": true,
+    "cat": "A",
+    "cc": "系统提示层",
+    "how": "计划模式不硬拦 → CC 无此硬拦"
+  },
+  {
+    "id": 64,
+    "name": "HOOKS_STOP_STEER_NEUTRAL",
+    "desc": "Stop hook 不再 steer 假用户话 / Stop hook no longer steers fake user text",
+    "layer": "工具",
+    "file": [
+      "hooks-claude-code",
+      "hooks-claude-code-nested",
+      "hooks-codex",
+      "hooks-codex-nested"
+    ],
+    "optional": true,
+    "cat": "C",
+    "cc": "钩子层",
+    "how": "Stop hook 不 steer → CC hooks 只保留 SessionStart"
+  },
+  {
+    "id": 65,
+    "name": "HOOKS_PRESTEP_REJECT_NEUTRAL",
+    "desc": "UserPromptSubmit deny 不再 reject 整轮 / pre-step hook deny no longer rejects turn",
+    "layer": "工具",
+    "file": [
+      "hooks-claude-code",
+      "hooks-claude-code-nested",
+      "hooks-codex",
+      "hooks-codex-nested"
+    ],
+    "optional": true,
+    "cat": "C",
+    "cc": "钩子层",
+    "how": "pre-step deny 不 reject → CC hooks 不设 UserPromptSubmit deny"
+  },
+  {
+    "id": 78,
+    "name": "OVERLAY_RESTORE_FROM_BAK",
+    "desc": "声明过的补丁文件不见时，从 .dshpurge.bak 拷回再加载 / restore a missing declared overlay from its bak",
+    "layer": "代码",
+    "file": [
+      "app-boot"
+    ],
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "overlay 从 bak 恢复 → CC setup.sh 自愈"
+  },
+  {
+    "id": 82,
+    "name": "DESKTOP_SHELL_PROFILE_FALLBACK",
+    "desc": "主进程兜底 DSH_PROFILE=desktop：双击 exe 从 explorer 继承 env 常缺 DSH_PROFILE → host 'cannot determine the boot profile' → dsh-purge",
+    "layer": "代码",
+    "file": "desktop-shell",
+    "optional": true,
+    "cat": "E",
+    "cc": "无对应物",
+    "how": "desktop profile fallback → CC 无 DSH_PROFILE"
+  },
+  {
+    "id": 87,
+    "name": "HUNG_PROMPT_LF_NEEDLE",
+    "desc": "空白宿主先挂全文，再用 LF 比对头尾，避免 CRLF 误判再糊一份",
+    "layer": "代码",
+    "file": [
+      "agent-loop"
+    ],
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "空白宿主挂全文 → CC 直接写 CRI 文件"
+  },
+  {
+    "id": 88,
+    "name": "HUNG_PROMPT_STRICT_NEEDLE",
+    "desc": "ChatML 头和正文尾都在才算挂住，只剩头或只剩尾都重新置顶",
+    "layer": "代码",
+    "file": [
+      "agent-loop"
+    ],
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "strict needle 置顶 → CC 直接写 CRI 文件"
+  },
+  {
+    "id": 90,
+    "name": "RESTORE_NATIVE_STEERING",
+    "desc": "恢复原生插话与队列顺序，迁移旧 #85/#86/#90 / restore native steering and queue order",
+    "layer": "代码",
+    "file": [
+      "api-session-controller",
+      "agent-loop"
+    ],
+    "optional": false,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "恢复原生 steering → CC 无 steer 队列"
+  },
+  {
+    "id": 89,
+    "name": "ASK_USER_WAIT_CAPPED",
+    "desc": "尊重模型给的等待时间，只把「无限等待(-1)」收成 5 分钟 / honor requested timeout, cap -1",
+    "layer": "工具",
+    "file": [
+      "tool-ask-user"
+    ],
+    "optional": true,
+    "cat": "C",
+    "cc": "钩子层",
+    "how": "ask_user 等待封顶 → CC 无 ask_user 无限等"
+  },
+  {
+    "id": 18,
+    "name": "REPEAT_TOOL_REMINDER_DISABLED",
+    "desc": "重复调用守卫禁用 / repeat-tool-reminder disabled（可选，默认关闭；开启会取消上下文保护）",
+    "layer": "代码",
+    "file": "repeat-tool-reminder",
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "重复调用守卫禁用 → CC 无此守卫"
+  },
+  {
+    "id": 19,
+    "name": "TOOL_RESULT_PRUNER_DISABLED",
+    "desc": "工具结果修剪禁用 / tool-result pruner disabled（可选，默认关闭；开启会取消上下文保护）",
+    "layer": "代码",
+    "file": "compaction-tool-result-pruner",
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "工具结果修剪禁用 → CC 无此修剪"
+  },
+  {
+    "id": 95,
+    "name": "INSPECTOR_FRAME_BUDGET_RECORD_OVERHEAD",
+    "desc": "Cordis 树预留记录开销，超限时保留上一帧",
+    "layer": "代码",
+    "file": "experimental-inspector",
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "inspector 帧预算 → CC 无此 UI"
+  },
+  {
+    "id": 96,
+    "name": "INSPECTOR_FRAME_BUDGET_RECORD_OVERHEAD_CLIENT",
+    "desc": "Cordis 树预留记录开销，超限时保留上一帧",
+    "layer": "代码",
+    "file": "experimental-inspector-client",
+    "optional": true,
+    "cat": "D",
+    "cc": "CC原生",
+    "how": "inspector 帧预算客户端 → CC 无此 UI"
+  }
+]

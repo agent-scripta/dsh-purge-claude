@@ -1,0 +1,16 @@
+{
+  "name": "purge",
+  "description": "破甲按需注入（源 dsh-purge v1.7.20 / DSH-Go 适配）：多档位（含原版无限制档）+ 文本控制面板 + 88 条补丁→CC 落地 + 23 红队技能（rt 原生命令）+ redteam 得分/资产/攻击链系统。默认正常会话，/purge:* 按需切换。",
+  "version": "1.7.20-cc.1",
+  "author": {
+    "name": "Little Code Sauce (adapted from evan545295555-hash/Evans-repo)",
+    "url": "https://github.com/evan545295555-hash/Evans-repo"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/kingcharleslzy-ai/dsh-purge",
+  "sourceRepositories": {
+    "promptSource": "dsh-purge v1.7.20 (Little Code Sauce / 小码酱 prompt set + unrestricted 原版中性档; DSH-Go/Desktop 0.2.2 adaptation)",
+    "adaptedFrom": "https://github.com/evan545295555-hash/Evans-repo",
+    "attributionNote": "Original dsh-purge by 小杨; community source kingcharleslzy-ai/dsh-purge. MIT license and attribution requirements apply."
+  }
+}

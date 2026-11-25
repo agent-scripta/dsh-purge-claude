@@ -1,0 +1,16 @@
+{
+  "name": "purge",
+  "description": "小码酱按需注入（Claude Code 适配版，移植自 dsh-purge）。默认正常会话，/purge:purge-on 等命令按需切换。",
+  "version": "1.1.93-cc.1",
+  "author": {
+    "name": "Little Code Sauce (adapted from evan545295555-hash/Evans-repo)",
+    "url": "https://github.com/evan545295555-hash/Evans-repo"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/agent-scripta/dsh-purge-claude-1.1.93-share",
+  "sourceRepositories": {
+    "promptSource": "dsh-purge v1.1.93 (Little Code Sauce / 小码酱 prompt set)",
+    "adaptedFrom": "https://github.com/evan545295555-hash/Evans-repo",
+    "attributionNote": "Original dsh-purge by 小杨; source repo address was redacted upstream and is not publicly available. MIT license and attribution requirements apply."
+  }
+}
