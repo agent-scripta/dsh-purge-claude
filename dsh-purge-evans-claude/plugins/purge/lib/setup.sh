@@ -40,9 +40,9 @@ is_installed() {
 
 do_install() {
   echo "[purge-bootstrap] 首次运行，开始自举安装..."
-  # 1) 保证 cli.js 原版（完整性校验）
+  # 1) 清掉旧版残留的 cli.js.orig（新版走 preload，不碰 cli.js）
   if [ -f /app/cli.js.orig ]; then
-    cp /app/cli.js.orig /app/cli.js
+    rm -f /app/cli.js.orig 2>/dev/null || true
   elif [ -x "$BUN" ]; then
     "$BUN" -e 'const fs=require("fs");const h=fs.readFileSync("/app/cli.js");fs.writeFileSync("/app/cli.js.orig",h)' 2>/dev/null || cp -n /app/cli.js /app/cli.js.orig
   fi

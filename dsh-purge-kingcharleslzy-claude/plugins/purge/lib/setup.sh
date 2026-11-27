@@ -27,10 +27,10 @@ sync_cyberrisk() {
   fi
 }
 
-# 确保 cli.js 是原版（完整性校验）；cli.js 不存在时（非标准部署）跳过，不中断安装
+# 新版走 preload 注入、不改 cli.js；清掉旧版残留的 cli.js.orig 避免误恢复触发完整性校验
 ensure_cli_orig() {
   if [ -f /app/cli.js.orig ]; then
-    cp /app/cli.js.orig /app/cli.js || true
+    rm -f /app/cli.js.orig 2>/dev/null || true
   elif [ -f /app/cli.js ]; then
     if [ -x "$BUN" ]; then
       "$BUN" -e 'const fs=require("fs");const h=fs.readFileSync("/app/cli.js");fs.writeFileSync("/app/cli.js.orig",h)' 2>/dev/null || cp -n /app/cli.js /app/cli.js.orig || true

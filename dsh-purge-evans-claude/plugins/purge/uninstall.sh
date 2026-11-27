@@ -24,8 +24,8 @@ if [ -f /app/preload.ts ] && grep -q 'PATCH-MARKER-v2' /app/preload.ts 2>/dev/nu
   fi
 fi
 
-# 3) 恢复 cli.js 原版
-if [ -f /app/cli.js.orig ]; then cp /app/cli.js.orig /app/cli.js; echo "cli.js 已恢复原版"; fi
+# 3) 清掉旧版残留的 cli.js.orig（新版从不改 cli.js；恢复它会破坏完整性校验）
+rm -f /app/cli.js.orig 2>/dev/null || true
 
 # 4) 删命令 / 运行态 / 技能 / 插件缓存 / 源
 rm -f /usr/local/bin/purge
